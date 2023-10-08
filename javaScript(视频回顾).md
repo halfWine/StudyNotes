@@ -276,12 +276,129 @@ person2.sayHello(); // 输出：Hello, my name is Alice
 ## 原型之间的关系
 
 1. 原型：每个函数都会附带一个属性prototype，这个属性的值是一个普通对象，称之为原型对象
-2. 实例：instance，通过new产生的对象称之为实例
+2. 实例：instance，通过new产生的对象称之为 实例
 
 >由于JS中所有的对象都是通过new产生的，因此，严格来说，JS中所有的对象都称之为实例
 
 3. 隐式原型：每个实例都拥有一个特殊的属性--proto--,称之为隐式原型，它指向构造函数的原型
 
 
+# this相关
 
-  
+不同的场景中，这（this）指代的含义不同，JS中的this关键字也是如此：
+
+* 在全局代码中使用this，指代全局对象
+
+> 在真实的开发中，很少在全局代码使用this
+
+* 在函数中使用this，他的指向完全取决于函数是如何被调用的
+
+| 调用方式       | 示例                | 函数中的this指向 |
+| -------------- | ------------------- | ---------------- |
+| 通过new调用    | new  method（）     | 新对象           |
+| 直接调用       | method（）          | 全局对象         |
+| 通过对象掉调用 | obj.method（）      | 前面的对象       |
+| call           | method.call（ctx）  | call的第一个参数 |
+| apply          | method.apply（ctx） | call的第一个参数 |
+
+改变this 的方法：
+
+
+在JavaScript中，有多种方式可以改变函数中`this`的指向。以下是几种常见的方式：
+
+1. 使用`call()`方法或`apply()`方法：这两个方法允许你显式地指定函数的上下文（即`this`的值）。`call()`方法接受一个指定的上下文对象作为第一个参数，后面是函数的参数列表。`apply()`方法与`call()`类似，只是它接受一个数组作为函数的参数列表。
+
+2. 使用`bind()`方法：`bind()`方法会创建一个新的函数，并将其上下文（即`this`的值）绑定到指定的对象。返回的函数可以稍后调用。
+
+3. 使用箭头函数：箭头函数不会创建自己的`this`，而是会继承其父函数的`this`。这意味着在箭头函数中，`this`的值是在定义时确定的，而不是在运行时确定的。
+
+4. 通过闭包保存`this`：在函数内部使用闭包可以在函数外部保存`this`的值，并在需要时访问它。
+
+以下是每种方式的示例：
+
+```javascript
+// 使用call()
+var obj1 = { name: "Alice" };
+
+function sayHello() {
+  console.log("Hello, " + this.name + "!");
+}
+
+sayHello.call(obj1); // 输出 "Hello, Alice!"
+
+// 使用apply()
+var obj2 = { name: "Bob" };
+var args = ["Hi"];
+
+function sayGreeting(greeting) {
+  console.log(greeting + ", " + this.name + "!");
+}
+
+sayGreeting.apply(obj2, args); // 输出 "Hi, Bob!"
+
+// 使用bind()
+var obj3 = { name: "Charlie" };
+
+function sayHi() {
+  console.log("Hi, " + this.name + "!");
+}
+
+var sayHiWithObj3 = sayHi.bind(obj3);
+sayHiWithObj3(); // 输出 "Hi, Charlie!"
+
+// 使用箭头函数
+var obj4 = { name: "David" };
+
+var sayHola = () => {
+  console.log("Hola, " + this.name + "!");
+};
+
+sayHola.call(obj4); // 输出 "Hola, David!"
+
+// 闭包保存this
+var obj5 = { name: "Eve" };
+
+function sayBonjour() {
+  var self = this;
+  function innerFunc() {
+    console.log("Bonjour, " + self.name + "!");
+  }
+  innerFunc();
+}
+
+sayBonjour.call(obj5); // 输出 "Bonjour, Eve!"
+```
+
+请注意，某些情况下，函数的`this`值是由调用方式决定的，无法通过以上方法来更改。例如，在使用事件处理程序时，函数的`this`通常会自动绑定到触发事件的元素。
+
+## 约定
+
+在对象中的方法一般使用this 获取当前对象的方法
+
+# BOM对象
+
+
+# DOM对象
+
+获取dom方法。。。
+
+修改dom树。。。
+
+### dom属性：
+* 标准属性：HTML元素本身拥有的属性
+* 自定义属性：HTML元素标准未定义的属性
+
+> 所有的标准属性均可以通过dom.属性名取得
+
+* 布尔属性会被自动转换为boolean
+* 路径类的属性被转换为绝对路径
+* 标准属性始终都是存在的，不管你是否有在元素中属性改属性
+
+> 所有的自定义属性均可通过下面的方式操作：
+
+* dom.setAttribute(name, value),设置属性键值对
+* dom.getAttribute(name),获取属性值
+
+自定义属性和元素源码书写是对应的，可以尝试获取a元素的href属性对比标准属性，看看不同之处
+
+### css样式
