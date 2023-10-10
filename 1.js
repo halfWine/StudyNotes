@@ -15,7 +15,7 @@ Poker：一张扑克牌
 */
 
 /**
- * 
+ *
  * @param {number} number  1-1,...11-J,12-Q,13-K,14-小王，15-大王
  * @param {color} color 1-黑桃，2-红桃，3-梅花，4-方片
  */
@@ -52,8 +52,31 @@ Poker：一张扑克牌
 
 // p1.print();
 
-var test='helloworld'
-(function test() {
-    test = 'codereasy'
-    console.log(test)
-})()
+// var test='helloworld'
+// (function test() {
+//     test = 'codereasy'
+//     console.log(test)
+// })()
+
+
+/**防抖
+ * 
+ * @param {*} fn 
+ * @param {*} time 
+ * @returns 
+ */
+function debounce(fn, time) {
+  let timeID;
+  return function name(params) {
+    let shiThis = this;
+    clearTimeout(timeID);
+    timeID = setTimeout(function (params) {
+      fn.call(shiThis, params);
+    }, time);
+  };
+}
+
+function shiijian(e) {
+  console.log("事件", e.target.value);
+}
+input.addEventListener("input", debounce(shiijian, 2000));
